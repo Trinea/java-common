@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/2/trunk/src/main/java/com/trinea/java/common/serviceImpl
+END
+RemoveTypeEnterTimeLast.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/8/trunk/src/main/java/com/trinea/java/common/serviceImpl/RemoveTypeEnterTimeLast.java
+END
+RemoveTypePriorityHigh.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/!svn/ver/8/trunk/src/main/java/com/trinea/java/common/serviceImpl/RemoveTypePriorityHigh.java
+END
+RemoveTypeDataSmall.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/8/trunk/src/main/java/com/trinea/java/common/serviceImpl/RemoveTypeDataSmall.java
+END
+RemoveTypeUsedCountSmall.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/8/trunk/src/main/java/com/trinea/java/common/serviceImpl/RemoveTypeUsedCountSmall.java
+END
+RemoveTypePriorityLow.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/8/trunk/src/main/java/com/trinea/java/common/serviceImpl/RemoveTypePriorityLow.java
+END
+RemoveTypeEnterTimeFirst.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/8/trunk/src/main/java/com/trinea/java/common/serviceImpl/RemoveTypeEnterTimeFirst.java
+END
+AutoGetDataCache.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/10/trunk/src/main/java/com/trinea/java/common/serviceImpl/AutoGetDataCache.java
+END
+RemoveTypeLastUsedTimeLast.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/8/trunk/src/main/java/com/trinea/java/common/serviceImpl/RemoveTypeLastUsedTimeLast.java
+END
+RemoveTypeDataBig.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/8/trunk/src/main/java/com/trinea/java/common/serviceImpl/RemoveTypeDataBig.java
+END
+RemoveTypeLastUsedTimeFirst.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/8/trunk/src/main/java/com/trinea/java/common/serviceImpl/RemoveTypeLastUsedTimeFirst.java
+END
+RemoveTypeUsedCountBig.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/!svn/ver/8/trunk/src/main/java/com/trinea/java/common/serviceImpl/RemoveTypeUsedCountBig.java
+END
+SimpleCache.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/5/trunk/src/main/java/com/trinea/java/common/serviceImpl/SimpleCache.java
+END
+RemoveTypeNotRemove.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/8/trunk/src/main/java/com/trinea/java/common/serviceImpl/RemoveTypeNotRemove.java
+END

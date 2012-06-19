@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/2/trunk/src/test/java/com/trinea/java/common
+END
+ArrayUtilsTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/3/trunk/src/test/java/com/trinea/java/common/ArrayUtilsTest.java
+END
+HttpUtilsTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/4/trunk/src/test/java/com/trinea/java/common/HttpUtilsTest.java
+END
+FileUtilsTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/4/trunk/src/test/java/com/trinea/java/common/FileUtilsTest.java
+END
+RandomsUtilsTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/3/trunk/src/test/java/com/trinea/java/common/RandomsUtilsTest.java
+END
+ObjectUtilsTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/4/trunk/src/test/java/com/trinea/java/common/ObjectUtilsTest.java
+END
+StringUtilsTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/3/trunk/src/test/java/com/trinea/java/common/StringUtilsTest.java
+END
+SerializeUtilsTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/4/trunk/src/test/java/com/trinea/java/common/SerializeUtilsTest.java
+END
+JSONUtilsTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/4/trunk/src/test/java/com/trinea/java/common/JSONUtilsTest.java
+END
+JUnitTestUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/3/trunk/src/test/java/com/trinea/java/common/JUnitTestUtils.java
+END
+ListUtilsTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/4/trunk/src/test/java/com/trinea/java/common/ListUtilsTest.java
+END
+MapUtilsTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/3/trunk/src/test/java/com/trinea/java/common/MapUtilsTest.java
+END

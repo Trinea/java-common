@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/2/trunk/src/test/java/com/trinea/java/common/serviceImpl
+END
+AutoGetDataCacheTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/9/trunk/src/test/java/com/trinea/java/common/serviceImpl/AutoGetDataCacheTest.java
+END
+CacheFullRemoveTypeTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/4/trunk/src/test/java/com/trinea/java/common/serviceImpl/CacheFullRemoveTypeTest.java
+END
+AutoGetDataCacheDemo.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/8/trunk/src/test/java/com/trinea/java/common/serviceImpl/AutoGetDataCacheDemo.java
+END
+SimpleCacheTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/4/trunk/src/test/java/com/trinea/java/common/serviceImpl/SimpleCacheTest.java
+END
