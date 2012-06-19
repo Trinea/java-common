@@ -4,7 +4,6 @@
 target/* # ignore target folder
 .svn	# ignore folder start with .
 gen		# android gen folder
-*/.svn
 
 *.pydevproject
 .project

@@ -1,14 +1,14 @@
 10
 
 dir
-2
+10
 https://trinea-java-common.googlecode.com/svn/trunk/src/test/java/com/trinea/java/common/serviceImpl
 https://trinea-java-common.googlecode.com/svn
 
 
 
-2012-05-08T13:24:10.691726Z
-2
+2012-06-18T07:55:00.164283Z
+9
 trinea1989@gmail.com
 has-props
 
@@ -28,7 +28,7 @@ faea5b58-39a8-aa54-3254-73ee4c527f77
 
 AutoGetDataCacheTest.java
 file
-9
+
 
 
 
@@ -62,7 +62,7 @@ trinea1989@gmail.com
 
 CacheFullRemoveTypeTest.java
 file
-4
+
 
 
 
@@ -96,7 +96,7 @@ trinea1989@gmail.com
 
 AutoGetDataCacheDemo.java
 file
-8
+
 
 
 
@@ -130,7 +130,7 @@ trinea1989@gmail.com
 
 SimpleCacheTest.java
 file
-4
+
 
 
 
