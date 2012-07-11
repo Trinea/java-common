@@ -2,9 +2,13 @@ package com.trinea.java.common;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,6 +83,40 @@ public class FileUtils {
             if (fileWriter != null) {
                 try {
                     fileWriter.close();
+                } catch (IOException e) {
+                    throw new RuntimeException("IOException occurred. ", e);
+                }
+            }
+        }
+    }
+
+    /**
+     * 写文件
+     * 
+     * @param filePath 文件路径
+     * @param stream 内容流
+     * @return
+     */
+    public static boolean writeFile(String filePath, InputStream stream) {
+        OutputStream o = null;
+        try {
+            o = new FileOutputStream(filePath);
+            byte data[] = new byte[1024];
+            int length = -1;
+            while ((length = stream.read(data)) != -1) {
+                o.write(data, 0, length);
+            }
+            o.flush();
+            return true;
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("FileNotFoundException occurred. ", e);
+        } catch (IOException e) {
+            throw new RuntimeException("IOException occurred. ", e);
+        } finally {
+            if (o != null) {
+                try {
+                    o.close();
+                    stream.close();
                 } catch (IOException e) {
                     throw new RuntimeException("IOException occurred. ", e);
                 }
@@ -321,11 +359,11 @@ public class FileUtils {
     }
 
     /**
-     * 删除文件或空文件夹
+     * 删除文件或文件夹
      * <ul>
      * <li>路径为null或空字符串，返回true</li>
      * <li>路径不存在，返回true</li>
-     * <li>路径存在并且为文件或空文件夹，返回{@link File#delete()}，否则返回false</li>
+     * <li>路径存在并且为文件或文件夹，返回{@link File#delete()}，否则返回false</li>
      * <ul>
      * 
      * @param path 路径
@@ -341,10 +379,35 @@ public class FileUtils {
             if (file.isFile()) {
                 return file.delete();
             } else if (file.isDirectory()) {
+                for (File f : file.listFiles()) {
+                    if (f.isFile()) {
+                        f.delete();
+                    } else if (f.isDirectory()) {
+                        deleteFile(f.getAbsolutePath());
+                    }
+                }
                 return file.delete();
             }
             return false;
         }
         return true;
+    }
+
+    /**
+     * 得到文件大小
+     * <ul>
+     * <li>路径为null或空字符串，返回-1</li>
+     * <li>路径存在并且为文件，返回文件大小，否则返回-1</li>
+     * <ul>
+     * 
+     * @param path 路径
+     * @return
+     */
+    public static long getFileSize(String path) {
+        if (StringUtils.isBlank(path)) {
+            return -1;
+        }
+        File file = new File(path);
+        return (file.exists() && file.isFile() ? file.length() : -1);
     }
 }

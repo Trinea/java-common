@@ -1,6 +1,11 @@
 package com.trinea.java.common.service;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+
 import com.trinea.java.common.entity.CacheObject;
+import com.trinea.java.common.serviceImpl.SimpleCache;
 
 /**
  * 小型缓存
@@ -31,7 +36,7 @@ public interface Cache<K, V> {
      * @param value 元素值
      * @return
      */
-    public void put(K key, V value);
+    public CacheObject<V> put(K key, V value);
 
     /**
      * 向缓存中添加元素
@@ -40,7 +45,14 @@ public interface Cache<K, V> {
      * @param obj 元素
      * @return
      */
-    public void put(K key, CacheObject<V> obj);
+    public CacheObject<V> put(K key, CacheObject<V> obj);
+
+    /**
+     * 将cache2中的所有元素复制到当前cache
+     * 
+     * @param cache2
+     */
+    public void putAll(SimpleCache<K, V> cache2);
 
     /**
      * 缓存中某个key是否存在
@@ -69,4 +81,25 @@ public interface Cache<K, V> {
      * @return
      */
     public double getHitRate();
+
+    /**
+     * 缓存中key的集合
+     * 
+     * @return
+     */
+    public Set<K> keySet();
+
+    /**
+     * 缓存中元素的集合
+     * 
+     * @return
+     */
+    public Set<Map.Entry<K, CacheObject<V>>> entrySet();
+
+    /**
+     * 缓存中元素值的集合
+     * 
+     * @return
+     */
+    public Collection<CacheObject<V>> values();
 }

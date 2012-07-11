@@ -138,9 +138,33 @@ public class FileUtilsTest extends TestCase {
         assertTrue(FileUtils.deleteFile(folderName));
         assertTrue(FileUtils.makeFolder(folderName));
         assertTrue(FileUtils.deleteFile(folderName));
-        String fileName = BASE_DIR + "\\testDeleteFile.txt";
+        String fileName = folderName + "\\testDeleteFile.txt";
+        assertTrue(FileUtils.makeFolder(fileName));
         FileUtils.writeFile(fileName, "aa", true);
         assertTrue(FileUtils.deleteFile(fileName));
+        assertTrue(FileUtils.makeFolder(folderName));
+        fileName = folderName + "\\testDeleteFile1.txt";
+        FileUtils.writeFile(fileName, "aa", true);
+        fileName = folderName + "\\testDeleteFile2.txt";
+        FileUtils.writeFile(fileName, "aa", true);
+        fileName = folderName + "\\testDeleteFile3.txt";
+        FileUtils.writeFile(fileName, "aa", true);
+        fileName = folderName + "\\inFolder\\testDeleteFile4.txt";
+        assertTrue(FileUtils.makeFolder(fileName));
+        FileUtils.writeFile(fileName, "aa", true);
+        assertTrue(FileUtils.deleteFile(folderName));
     }
 
+    public void testGetFileSize() {
+        assertTrue(FileUtils.getFileSize(null) == -1);
+        assertTrue(FileUtils.getFileSize("") == -1);
+        String folderName = BASE_DIR + "\\testGetFileSize\\folder\\";
+        assertTrue(FileUtils.makeFolder(folderName));
+        assertTrue(FileUtils.getFileSize(folderName) == -1);
+        String fileName = folderName + "testGetFileSize.txt";
+        FileUtils.writeFile(fileName, "aa", true);
+        assertTrue(FileUtils.getFileSize(fileName) > 0);
+        assertTrue(FileUtils.deleteFile(fileName));
+        assertTrue(FileUtils.getFileSize(fileName) == -1);
+    }
 }

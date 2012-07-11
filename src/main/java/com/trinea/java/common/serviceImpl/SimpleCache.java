@@ -1,8 +1,10 @@
 package com.trinea.java.common.serviceImpl;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -17,28 +19,28 @@ import com.trinea.java.common.service.CacheFullRemoveType;
  * <ul>
  * 缓存使用
  * <li>使用下面缓存初始化中介绍的几种构造函数之一初始化缓存</li>
- * <li>使用{@link SimpleCache#put(Object, CacheObject)}或{@link SimpleCache#put(Object, Object)}向缓存中put元素</li>
- * <li>使用{@link SimpleCache#get(Object)}从缓存中get元素</li>
- * <li>使用{@link SimpleCache#loadCache(String)}从文件中恢复缓存</li>
- * <li>使用{@link SimpleCache#saveCache(String, SimpleCache)}保存缓存到文件</li>
+ * <li>使用{@link #put(Object, CacheObject)}或{@link #put(Object, Object)}向缓存中put元素</li>
+ * <li>使用{@link #get(Object)}从缓存中get元素</li>
+ * <li>使用{@link #loadCache(String)}从文件中恢复缓存</li>
+ * <li>使用{@link #saveCache(String, SimpleCache)}保存缓存到文件</li>
  * </ul>
  * <ul>
  * 缓存初始化
- * <li>{@link SimpleCache#SimpleCache(int, long, CacheFullRemoveType)}</li>
- * <li>{@link SimpleCache#SimpleCache(int, long)}</li>
- * <li>{@link SimpleCache#SimpleCache(int, CacheFullRemoveType)}</li>
- * <li>{@link SimpleCache#SimpleCache(int)}</li>
- * <li>{@link SimpleCache#SimpleCache()}</li>
- * <li>{@link SimpleCache#loadCache(String)}从文件中恢复缓存</li>
+ * <li>{@link #SimpleCache()}</li>
+ * <li>{@link #SimpleCache(int)}</li>
+ * <li>{@link #SimpleCache(int, long)}</li>
+ * <li>{@link #SimpleCache(int, CacheFullRemoveType)}</li>
+ * <li>{@link #SimpleCache(int, long, CacheFullRemoveType)}</li>
+ * <li>{@link #loadCache(String)}从文件中恢复缓存</li>
  * </ul>
  * <ul>
  * 对于<strong>缓存的大小</strong>
- * <li>{@link SimpleCache#getMaxSize()}表示缓存最大容量</li>
- * <li>{@link SimpleCache#getSize()}表示缓存中所有元素个数</li>
- * <li>{@link SimpleCache#getValidSize()}表示缓存中当前有效元素个数</li>
+ * <li>{@link #getMaxSize()}表示缓存最大容量</li>
+ * <li>{@link #getSize()}表示缓存中所有元素个数</li>
+ * <li>{@link #getValidSize()}表示缓存中当前有效元素个数</li>
  * </ul>
  * <ul>
- * 对于缓存中<strong>元素是否存在</strong>，可以{@link SimpleCache#containsKey(Object)}判断，判断规则为：
+ * 对于缓存中<strong>元素是否存在</strong>，可以{@link #containsKey(Object)}判断，判断规则为：
  * <li>若元素不存在，返回false</li>
  * <li>若元素存在但已经失效，返回false</li>
  * <li>以上都不符合，返回true</li>
@@ -70,9 +72,60 @@ public class SimpleCache<K, V> implements Cache<K, V>, Serializable {
 
     /**
      * 初始化缓存
+     * <ul>
+     * <li>缓存最大容量为{@link #DEFAULT_MAX_SIZE}</li>
+     * <li>元素不会失效</li>
+     * <li>cache满时删除元素类型为{@link RemoveTypeEnterTimeFirst}</li>
+     * </ul>
+     */
+    public SimpleCache(){
+        this(DEFAULT_MAX_SIZE, -1, new RemoveTypeEnterTimeFirst<V>());
+    }
+
+    /**
+     * 初始化缓存
+     * <ul>
+     * <li>元素不会失效</li>
+     * <li>cache满时删除元素类型为{@link RemoveTypeEnterTimeFirst}</li>
+     * </ul>
      * 
      * @param maxSize 缓存最大容量
-     * @param validTime 缓存中元素有效时间，小于0表示元素不会失效，失效规则见{@link SimpleCache#isExpired(CacheObject)}
+     */
+    public SimpleCache(int maxSize){
+        this(maxSize, -1, new RemoveTypeEnterTimeFirst<V>());
+    }
+
+    /**
+     * 初始化缓存
+     * <ul>
+     * <li>cache满时删除元素类型为{@link RemoveTypeEnterTimeFirst}</li>
+     * </ul>
+     * 
+     * @param maxSize 缓存最大容量
+     * @param validTime 缓存中元素有效时间，小于等于0表示元素不会失效，失效规则见{@link #isExpired(CacheObject)}
+     */
+    public SimpleCache(int maxSize, long validTime){
+        this(maxSize, validTime, new RemoveTypeEnterTimeFirst<V>());
+    }
+
+    /**
+     * 初始化缓存
+     * <ul>
+     * <li>元素不会失效</li>
+     * </ul>
+     * 
+     * @param maxSize 缓存最大容量
+     * @param cacheFullRemoveType cache满时删除元素类型，见{@link CacheFullRemoveType}
+     */
+    public SimpleCache(int maxSize, CacheFullRemoveType<V> cacheFullRemoveType){
+        this(maxSize, -1, cacheFullRemoveType);
+    }
+
+    /**
+     * 初始化缓存
+     * 
+     * @param maxSize 缓存最大容量
+     * @param validTime 缓存中元素有效时间，小于等于0表示元素不会失效，失效规则见{@link #isExpired(CacheObject)}
      * @param cacheFullRemoveType cache满时删除元素类型，见{@link CacheFullRemoveType}
      */
     public SimpleCache(int maxSize, long validTime, CacheFullRemoveType<V> cacheFullRemoveType){
@@ -84,45 +137,9 @@ public class SimpleCache<K, V> implements Cache<K, V>, Serializable {
                                                "The cacheFullRemoveType of cache must be a instance of CacheFullRemoveType.");
         }
         this.maxSize = maxSize;
-        this.validTime = validTime < 0 ? -1 : validTime;
+        this.validTime = validTime <= 0 ? -1 : validTime;
         this.cacheFullRemoveType = cacheFullRemoveType;
         this.cache = new ConcurrentHashMap<K, CacheObject<V>>(maxSize);
-    }
-
-    /**
-     * 初始化缓存，默认元素不会失效，cache满时删除元素类型为{@link RemoveTypeEnterTimeFirst}
-     * 
-     * @param maxSize 缓存最大容量
-     * @param validTime 缓存中元素有效时间，小于0表示元素不会失效
-     */
-    public SimpleCache(int maxSize, long validTime){
-        this(maxSize, validTime, new RemoveTypeEnterTimeFirst<V>());
-    }
-
-    /**
-     * 初始化缓存，默认元素不会失效
-     * 
-     * @param maxSize 缓存最大容量
-     * @param cacheFullRemoveType cache满时删除元素类型，见{@link CacheFullRemoveType}
-     */
-    public SimpleCache(int maxSize, CacheFullRemoveType<V> cacheFullRemoveType){
-        this(maxSize, -1, cacheFullRemoveType);
-    }
-
-    /**
-     * 初始化缓存，默认元素不会失效，cache满时删除元素类型为{@link RemoveTypeEnterTimeFirst}
-     * 
-     * @param maxSize 缓存最大容量
-     */
-    public SimpleCache(int maxSize){
-        this(maxSize, -1);
-    }
-
-    /**
-     * 初始化缓存，默认大小为{@link SimpleCache#DEFAULT_MAX_SIZE}，元素不会失效，cache满时删除元素类型为 {@link RemoveTypeEnterTimeFirst}
-     */
-    public SimpleCache(){
-        this(DEFAULT_MAX_SIZE, -1);
     }
 
     /**
@@ -154,7 +171,7 @@ public class SimpleCache<K, V> implements Cache<K, V>, Serializable {
 
     /**
      * 得到缓存中元素个数，可能包含已经失效的元素。
-     * 若需要得到有效元素个数 ，请使用{@link SimpleCache#getValidSize()}
+     * 若需要得到有效元素个数 ，请使用{@link #getValidSize()}
      * 
      * @return
      */
@@ -216,53 +233,67 @@ public class SimpleCache<K, V> implements Cache<K, V>, Serializable {
     /**
      * 向缓存中添加元素
      * <ul>
-     * <li>见{@link SimpleCache#put(Object, CacheObject)}</li>
+     * <li>见{@link #put(Object, CacheObject)}</li>
      * </ul>
      * 
      * @param key key
      * @param value 元素值
-     * @return
+     * @return 为空表示缓存已满无法put，否则为put的value。
      */
     @Override
-    public void put(K key, V value) {
+    public CacheObject<V> put(K key, V value) {
         CacheObject<V> obj = new CacheObject<V>();
         obj.setData(value);
         obj.setForever(validTime == -1);
-        put(key, obj);
+        return put(key, obj);
     }
 
     /**
      * 向缓存中添加元素
      * <ul>
-     * <li>若元素个数{@link SimpleCache#getSize()}小于最大容量，直接put进入，否则</li>
-     * <li>若有效元素个数{@link SimpleCache#getValidSize()}小于元素个数{@link SimpleCache#getSize()}，去除无效元素
-     * {@link SimpleCache#removeExpired()}后直接put进入，否则</li>
-     * <li>若{@link SimpleCache#cacheFullRemoveType}是{@link RemoveTypeNotRemove}的实例，直接返回null，否则</li>
-     * <li>按{@link SimpleCache#cacheFullRemoveType}删除元素后直接put进入</li>
+     * <li>若元素个数{@link #getSize()}小于最大容量，直接put进入，否则</li>
+     * <li>若有效元素个数{@link #getValidSize()}小于元素个数{@link #getSize()}，去除无效元素 {@link #removeExpired()}后直接put进入，否则</li>
+     * <li>若{@link #cacheFullRemoveType}是{@link RemoveTypeNotRemove}的实例，直接返回null，否则</li>
+     * <li>按{@link #cacheFullRemoveType}删除元素后直接put进入</li>
      * </ul>
      * 
      * @param key key
      * @param obj 元素
-     * @return
+     * @return 为空表示缓存已满无法put，否则为put的value。
      */
     @Override
-    public synchronized void put(K key, CacheObject<V> obj) {
+    public synchronized CacheObject<V> put(K key, CacheObject<V> obj) {
         if (getSize() >= maxSize) {
             if (getValidSize() < cache.size()) {
                 if (removeExpired() <= 0) {
-                    return;
+                    return null;
                 }
             } else {
                 if (cacheFullRemoveType instanceof RemoveTypeNotRemove) {
-                    return;
+                    return null;
                 }
                 if (fullRemoveOne() == null) {
-                    return;
+                    return null;
                 }
             }
         }
         obj.setEnterTime(System.currentTimeMillis());
         cache.put(key, obj);
+        return obj;
+    }
+
+    /**
+     * 将cache2中的所有元素复制到当前cache，相当于将cache2中的每一个元素{@link #put(Object, CacheObject)}到当前cache
+     * 
+     * @param cache2
+     */
+    @Override
+    public void putAll(SimpleCache<K, V> cache2) {
+        for (Entry<K, CacheObject<V>> e : cache2.entrySet()) {
+            if (e != null) {
+                put(e.getKey(), e.getValue());
+            }
+        }
     }
 
     /**
@@ -302,10 +333,10 @@ public class SimpleCache<K, V> implements Cache<K, V>, Serializable {
     }
 
     /**
-     * 缓存满时从缓存中按照{@link SimpleCache#cacheFullRemoveType}规则删除一个元素
+     * 缓存满时从缓存中按照{@link #cacheFullRemoveType}规则删除一个元素
      * <ul>
-     * <li>若{@link SimpleCache#cacheFullRemoveType}是{@link RemoveTypeNotRemove}的实例返回null，否则</li>
-     * <li>按{@link SimpleCache#cacheFullRemoveType}从未过期元素中查找删除的元素删除，未查找到返回null</li>
+     * <li>若{@link #cacheFullRemoveType}是{@link RemoveTypeNotRemove}的实例返回null，否则</li>
+     * <li>按{@link #cacheFullRemoveType}从未过期元素中查找删除的元素删除，未查找到返回null</li>
      * </ul>
      * 
      * @param key
@@ -382,7 +413,7 @@ public class SimpleCache<K, V> implements Cache<K, V>, Serializable {
      */
     protected boolean isExpired(CacheObject<V> obj) {
         return validTime != -1
-               && (obj == null || obj.isExpired() || (obj.getEnterTime() + validTime) <= System.currentTimeMillis());
+               && (obj == null || obj.isExpired() || (obj.getEnterTime() + validTime) < System.currentTimeMillis());
     }
 
     /**
@@ -404,9 +435,40 @@ public class SimpleCache<K, V> implements Cache<K, V>, Serializable {
      * 
      * @return
      */
+    @Override
     public synchronized double getHitRate() {
         long total = hitCount.get() + missCount.get();
         return (total == 0 ? 0 : ((double)hitCount.get()) / total);
+    }
+
+    /**
+     * 缓存中key的集合，可能包含过期的key
+     * 
+     * @return
+     */
+    @Override
+    public Set<K> keySet() {
+        return cache.keySet();
+    }
+
+    /**
+     * 缓存中元素的集合，可能包含过期的元素
+     * 
+     * @return
+     */
+    @Override
+    public Set<Map.Entry<K, CacheObject<V>>> entrySet() {
+        return cache.entrySet();
+    }
+
+    /**
+     * 缓存中元素值的集合，可能包含过期的元素值
+     * 
+     * @return
+     */
+    @Override
+    public Collection<CacheObject<V>> values() {
+        return cache.values();
     }
 
     /**

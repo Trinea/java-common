@@ -43,7 +43,7 @@ AutoGetDataCache.java
 K 25
 svn:wc:ra_dav:version-url
 V 93
-/svn/!svn/ver/10/trunk/src/main/java/com/trinea/java/common/serviceImpl/AutoGetDataCache.java
+/svn/!svn/ver/11/trunk/src/main/java/com/trinea/java/common/serviceImpl/AutoGetDataCache.java
 END
 RemoveTypeLastUsedTimeLast.java
 K 25
@@ -72,8 +72,8 @@ END
 SimpleCache.java
 K 25
 svn:wc:ra_dav:version-url
-V 87
-/svn/!svn/ver/5/trunk/src/main/java/com/trinea/java/common/serviceImpl/SimpleCache.java
+V 88
+/svn/!svn/ver/11/trunk/src/main/java/com/trinea/java/common/serviceImpl/SimpleCache.java
 END
 RemoveTypeNotRemove.java
 K 25

@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.trinea.java.common.serviceImpl.SimpleCacheTest
 -------------------------------------------------------------------------------
-Tests run: 24, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.911 sec
+Tests run: 24, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.825 sec

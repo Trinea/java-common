@@ -98,4 +98,46 @@ public class StringUtilsTest extends TestCase {
         assertTrue(StringUtils.isEquals("aa", "aa"));
         assertFalse(StringUtils.isEquals("aa", "ab"));
     }
+
+    public void testFullWidthToHalfWidth() {
+        assertNull(StringUtils.fullWidthToHalfWidth(null));
+        assertEquals(StringUtils.fullWidthToHalfWidth(""), "");
+        assertEquals(StringUtils.fullWidthToHalfWidth("！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ［＼］＾＿｀ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ｛｜｝～"),
+                     "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
+        assertEquals(StringUtils.fullWidthToHalfWidth(new String(new char[] {12288})), " ");
+//        assertEquals(StringUtils.fullWidthToHalfWidth(new String(new char[] {12290})), ".");
+//        assertEquals(StringUtils.fullWidthToHalfWidth(new String(new char[] {'。'})), ".");
+        assertEquals(StringUtils.fullWidthToHalfWidth(new String(new char[] {65280})), new String(new char[] {65280}));
+        assertEquals(StringUtils.fullWidthToHalfWidth(new String(new char[] {65375})), new String(new char[] {65375}));
+    }
+
+    public void testHalfWidthToFullWidth() {
+        assertNull(StringUtils.halfWidthToFullWidth(null));
+        assertEquals(StringUtils.halfWidthToFullWidth(""), "");
+        assertEquals(StringUtils.halfWidthToFullWidth("!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"),
+                     "！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ［＼］＾＿｀ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ｛｜｝～");
+        assertEquals(StringUtils.halfWidthToFullWidth(" "), new String(new char[] {12288}));
+//        assertEquals(StringUtils.halfWidthToFullWidth("."), new String(new char[] {12290}));
+//        assertEquals(StringUtils.halfWidthToFullWidth("."), new String(new char[] {'。'}));
+        assertEquals(StringUtils.halfWidthToFullWidth(new String(new char[] {65280})), new String(new char[] {65280}));
+        assertEquals(StringUtils.halfWidthToFullWidth(new String(new char[] {65375})), new String(new char[] {65375}));
+    }
+
+    public static void main(String[] args) {
+
+        System.out.println(StringUtils.halfWidthToFullWidth("!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"));
+        System.out.println("！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ［＼］＾＿｀ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ｛｜｝～");
+        for (int i = 32; i <= 126; i++) {
+            System.out.print((char)i);
+        }
+        System.out.println();
+        System.out.println((char)12290);
+        System.out.println((int)'.');
+        System.out.println((char)((int)'.' + 65248));
+        for (int i = 32; i <= 126; i++) {
+            System.out.print((char)(i + 65248));
+        }
+        System.out.println("iPad客户端".length());
+        System.out.println("时光机".length());
+    }
 }

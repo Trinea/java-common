@@ -39,6 +39,11 @@ public class CacheObject<V> implements Serializable, Comparable<CacheObject<V>> 
         this.isForever = true;
     }
 
+    public CacheObject(V data){
+        this();
+        this.data = data;
+    }
+
     public long getEnterTime() {
         return enterTime;
     }

@@ -1,9 +1,14 @@
 package com.trinea.java.common.serviceImpl;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
 import junit.framework.TestCase;
 
 import com.trinea.java.common.FileUtils;
 import com.trinea.java.common.entity.CacheObject;
+import com.trinea.java.common.service.CacheFullRemoveType;
 import com.trinea.java.common.utils.SleepUtils;
 
 public class SimpleCacheTest extends TestCase {
@@ -360,5 +365,37 @@ public class SimpleCacheTest extends TestCase {
             assertNotNull(cache.get(Integer.toString(i)));
             assertEquals(cache.get(Integer.toString(i)), outCache.get(Integer.toString(i)));
         }
+    }
+
+    public static void main(String[] args) {
+        SimpleCache<String, Thread> imageCache = new SimpleCache<String, Thread>(2, -1,
+                                                                                 new RemoveTypeUsedCountSmall<Thread>());
+        Class a = imageCache.getCacheFullRemoveType().getClass();
+        System.out.println(a);
+
+        try {
+            CacheFullRemoveType<String> removeType = (CacheFullRemoveType<String>)(a.newInstance());
+            SimpleCache<String, String> imageCache2 = new SimpleCache<String, String>(2, -1, removeType);
+            imageCache2.put("aa", "bb");
+            System.out.println(imageCache2.get("aa").getData());
+            Field[] field = a.getDeclaredFields();
+        } catch (IllegalAccessException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        Field[] field = a.getDeclaredFields();
+        for (Field f : field) {
+            Type t = f.getGenericType();
+            if (t instanceof ParameterizedType) {
+                ParameterizedType p = (ParameterizedType)t;
+                System.out.println(p.getActualTypeArguments()[0]);
+            }
+        }
+        // Type t = a.getGenericInterfaces()[0];
+        // System.out.println(t);
     }
 }

@@ -6,8 +6,8 @@ END
 ArrayUtilsTest.java
 K 25
 svn:wc:ra_dav:version-url
-V 78
-/svn/!svn/ver/3/trunk/src/test/java/com/trinea/java/common/ArrayUtilsTest.java
+V 79
+/svn/!svn/ver/11/trunk/src/test/java/com/trinea/java/common/ArrayUtilsTest.java
 END
 HttpUtilsTest.java
 K 25
@@ -18,8 +18,8 @@ END
 FileUtilsTest.java
 K 25
 svn:wc:ra_dav:version-url
-V 77
-/svn/!svn/ver/4/trunk/src/test/java/com/trinea/java/common/FileUtilsTest.java
+V 78
+/svn/!svn/ver/11/trunk/src/test/java/com/trinea/java/common/FileUtilsTest.java
 END
 RandomsUtilsTest.java
 K 25
@@ -36,8 +36,8 @@ END
 StringUtilsTest.java
 K 25
 svn:wc:ra_dav:version-url
-V 79
-/svn/!svn/ver/3/trunk/src/test/java/com/trinea/java/common/StringUtilsTest.java
+V 80
+/svn/!svn/ver/11/trunk/src/test/java/com/trinea/java/common/StringUtilsTest.java
 END
 SerializeUtilsTest.java
 K 25

@@ -43,7 +43,7 @@ public class AutoGetDataCacheTest extends TestCase {
 
         // 新建缓存
         AutoGetDataCache<String, String> cache = null;
-        cache = new AutoGetDataCache<String, String>(5, new OnGetDataListener<String, String>() {
+        cache = new AutoGetDataCache<String, String>(new OnGetDataListener<String, String>() {
 
             private static final long serialVersionUID = 1L;
 
@@ -53,8 +53,48 @@ public class AutoGetDataCacheTest extends TestCase {
                 o.setData(dataSource.get(key));
                 return o;
             }
-        });
+        }, 5, -1, new RemoveTypeUsedCountBig<String>());
         assertNotNull(cache);
+
+        cache = new AutoGetDataCache<String, String>(new OnGetDataListener<String, String>() {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public CacheObject<String> onGetData(String key) {
+                CacheObject<String> o = new CacheObject<String>();
+                o.setData(dataSource.get(key));
+                return o;
+            }
+        }, 5, -1);
+        assertNotNull(cache);
+
+        cache = new AutoGetDataCache<String, String>(new OnGetDataListener<String, String>() {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public CacheObject<String> onGetData(String key) {
+                CacheObject<String> o = new CacheObject<String>();
+                o.setData(dataSource.get(key));
+                return o;
+            }
+        }, 5, new RemoveTypeUsedCountSmall<String>());
+        assertNotNull(cache);
+
+        cache = new AutoGetDataCache<String, String>(new OnGetDataListener<String, String>() {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public CacheObject<String> onGetData(String key) {
+                CacheObject<String> o = new CacheObject<String>();
+                o.setData(dataSource.get(key));
+                return o;
+            }
+        }, 5);
+        assertNotNull(cache);
+
         cache = new AutoGetDataCache<String, String>(new OnGetDataListener<String, String>() {
 
             private static final long serialVersionUID = 1L;
@@ -67,18 +107,13 @@ public class AutoGetDataCacheTest extends TestCase {
             }
         });
         assertNotNull(cache);
-        cache = new AutoGetDataCache<String, String>(5, -1, new OnGetDataListener<String, String>() {
 
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public CacheObject<String> onGetData(String key) {
-                CacheObject<String> o = new CacheObject<String>();
-                o.setData(dataSource.get(key));
-                return o;
-            }
-        });
+        cache = null;
+        cache = new AutoGetDataCache<String, String>(null);
         assertNotNull(cache);
+        assertNull(cache.get(null));
+        CacheObject<String> value = cache.get(Integer.toString(2), null);
+        assertNull(value);
     }
 
     public void testGetAndAutoCacheNewData() {
@@ -93,18 +128,17 @@ public class AutoGetDataCacheTest extends TestCase {
 
         // 新建缓存
         AutoGetDataCache<String, String> cache = null;
-        cache = new AutoGetDataCache<String, String>(5, -1, new RemoveTypeEnterTimeFirst<String>(),
-                                                     new OnGetDataListener<String, String>() {
+        cache = new AutoGetDataCache<String, String>(new OnGetDataListener<String, String>() {
 
-                                                         private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-                                                         @Override
-                                                         public CacheObject<String> onGetData(String key) {
-                                                             CacheObject<String> o = new CacheObject<String>();
-                                                             o.setData(dataSource.get(key));
-                                                             return o;
-                                                         }
-                                                     });
+            @Override
+            public CacheObject<String> onGetData(String key) {
+                CacheObject<String> o = new CacheObject<String>();
+                o.setData(dataSource.get(key));
+                return o;
+            }
+        }, 5, -1, new RemoveTypeEnterTimeFirst<String>());
         assertNotNull(cache);
         // 设置向后缓存1个，向前缓存2个
         cache.setBackCacheNumber(1);
@@ -112,24 +146,24 @@ public class AutoGetDataCacheTest extends TestCase {
 
         CacheObject<String> value = cache.get(Integer.toString(0));
         assertNull(cache.get(null));
-        assertNull(cache.getAndAutoCacheNewData(null, null));
+        assertNull(cache.get(null, null));
         assertTrue(value != null && ObjectUtils.isEquals(value.getData(), Integer.toString(0)));
         assertTrue(cache.getValidSize() == 1);
         assertTrue(cache.getHitRate() == 0);
-        value = cache.getAndAutoCacheNewData(Integer.toString(2), null);
-        value = cache.getAndAutoCacheNewData(Integer.toString(2), keyList);
+        value = cache.get(Integer.toString(2), null);
+        value = cache.get(Integer.toString(2), keyList);
         assertTrue(1 / 3 - cache.getHitRate() < 0.000001);
         assertTrue(value != null && ObjectUtils.isEquals(value.getData(), Integer.toString(2)));
         SleepUtils.sleep();
         if (cache.getValidSize() == 5) {
-            value = cache.getAndAutoCacheNewData(Integer.toString(3), keyList);
+            value = cache.get(Integer.toString(3), keyList);
             assertTrue(cache.getHitRate() == 0.5);
-            value = cache.getAndAutoCacheNewData(Integer.toString(4), keyList);
+            value = cache.get(Integer.toString(4), keyList);
             assertTrue(cache.getHitRate() == 0.6);
-            value = cache.getAndAutoCacheNewData(Integer.toString(1), keyList);
+            value = cache.get(Integer.toString(1), keyList);
             assertTrue(2 / 3 - cache.getHitRate() < 0.00001);
         }
-        value = cache.getAndAutoCacheNewData(Integer.toString(5), keyList);
+        value = cache.get(Integer.toString(5), keyList);
     }
 
     public static void testSaveAndLoadData() {
@@ -145,18 +179,17 @@ public class AutoGetDataCacheTest extends TestCase {
         int cacheSize = 30, putSize = 50;
         // 新建缓存
         AutoGetDataCache<String, String> cache = null;
-        cache = new AutoGetDataCache<String, String>(cacheSize, -1, new RemoveTypeEnterTimeFirst<String>(),
-                                                     new OnGetDataListener<String, String>() {
+        cache = new AutoGetDataCache<String, String>(new OnGetDataListener<String, String>() {
 
-                                                         private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-                                                         @Override
-                                                         public CacheObject<String> onGetData(String key) {
-                                                             CacheObject<String> o = new CacheObject<String>();
-                                                             o.setData(dataSource.get(key));
-                                                             return o;
-                                                         }
-                                                     });
+            @Override
+            public CacheObject<String> onGetData(String key) {
+                CacheObject<String> o = new CacheObject<String>();
+                o.setData(dataSource.get(key));
+                return o;
+            }
+        }, cacheSize, -1, new RemoveTypeEnterTimeFirst<String>());
         cache.setBackCacheNumber(2);
         cache.setForwardCacheNumber(4);
         for (int i = 1; i <= putSize; i++) {

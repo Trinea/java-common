@@ -19,8 +19,11 @@ public class ArrayUtilsTest extends TestCase {
 
     public void testIsEmpty() {
         assertTrue(ArrayUtils.isEmpty((Object[])null));
+        assertTrue(ArrayUtils.isEmpty((String[])null));
 
-        String[] strArray = new String[] {"aa"};
+        String[] strArray = new String[] {};
+        assertTrue(ArrayUtils.isEmpty(strArray));
+        strArray = new String[] {"aa"};
         assertFalse(ArrayUtils.isEmpty(strArray));
 
         List<Integer> strList = new ArrayList<Integer>();

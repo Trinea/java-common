@@ -19,55 +19,56 @@ import com.trinea.java.common.service.CacheFullRemoveType;
  * <br/>
  * <ul>
  * 缓存设置及使用
- * <li>使用下面缓存初始化中介绍的几种构造函数之一初始化缓存，使用{@link AutoGetDataCache#setForwardCacheNumber(int)}设置向前缓存个数，默认个数为
- * {@link AutoGetDataCache#DEFAULT_FORWARD_CACHE_SIZE}；使用{@link AutoGetDataCache#setBackCacheNumber(int)}设置向后缓存个数，默认个数为
- * {@link AutoGetDataCache#DEFAULT_BACK_CACHE_SIZE}</li>
- * <li>使用{@link AutoGetDataCache#getAndAutoCacheNewData(Object, List)}get某个key，并且会自动获取新数据进行缓存</li>
- * <li>使用{@link AutoGetDataCache#get(Object)}get某个key，但不会自动获取新数据进行缓存</li>
- * <li>使用{@link AutoGetDataCache#loadCache(String)}从文件中恢复缓存</li>
- * <li>使用{@link AutoGetDataCache#saveCache(String, SimpleCache)}保存缓存到文件</li>
+ * <li>使用下面缓存初始化中介绍的几种构造函数之一初始化缓存，使用{@link #setForwardCacheNumber(int)}设置向前缓存个数，默认个数为
+ * {@link #DEFAULT_FORWARD_CACHE_NUMBER}；使用{@link #setBackCacheNumber(int)} 设置向后缓存个数，默认个数为
+ * {@link #DEFAULT_BACK_CACHE_NUMBER}</li>
+ * <li>使用{@link #get(Object, List)}get某个key，并且会自动获取list中key进行缓存</li>
+ * <li>使用{@link #get(Object)}get某个key，但不会自动获取新数据进行缓存</li>
+ * <li>使用{@link #loadCache(String)}从文件中恢复缓存</li>
+ * <li>使用{@link SimpleCache#saveCache(String, SimpleCache)}保存缓存到文件</li>
  * </ul>
  * <ul>
  * 缓存初始化
- * <li>{@link AutoGetDataCache#AutoGetDataCache(OnGetDataListener)}</li>
- * <li>{@link AutoGetDataCache#AutoGetDataCache(int, OnGetDataListener)}</li>
- * <li>{@link AutoGetDataCache#AutoGetDataCache(int, long, OnGetDataListener)}</li>
- * <li>{@link AutoGetDataCache#AutoGetDataCache(int, long, CacheFullRemoveType, OnGetDataListener)}</li>
- * <li>{@link AutoGetDataCache#loadCache(String)}从文件中恢复缓存</li>
+ * <li>{@link #AutoGetDataCache(OnGetDataListener)}</li>
+ * <li>{@link #AutoGetDataCache(OnGetDataListener, int)}</li>
+ * <li>{@link #AutoGetDataCache(OnGetDataListener, int, long)}</li>
+ * <li>{@link #AutoGetDataCache(OnGetDataListener, int, CacheFullRemoveType)}</li>
+ * <li>{@link #AutoGetDataCache(OnGetDataListener, int, long, CacheFullRemoveType)}</li>
+ * <li>{@link #loadCache(String)}从文件中恢复缓存</li>
  * </ul>
  * 
  * @author Trinea 2012-3-4 下午12:39:17
  */
 public class AutoGetDataCache<K, V> extends SimpleCache<K, V> {
 
-    private static final long               serialVersionUID           = 1L;
+    private static final long               serialVersionUID             = 1L;
 
     /** 默认自动向前缓存的个数 **/
-    private static final int                DEFAULT_FORWARD_CACHE_SIZE = 3;
+    private static final int                DEFAULT_FORWARD_CACHE_NUMBER = 3;
 
     /** 默认自动向后缓存的个数 **/
-    private static final int                DEFAULT_BACK_CACHE_SIZE    = 1;
+    private static final int                DEFAULT_BACK_CACHE_NUMBER    = 1;
 
-    /** 自动向前缓存的个数，默认个数为{@link AutoGetDataCache#DEFAULT_FORWARD_CACHE_SIZE} **/
-    private volatile int                    forwardCacheNumber         = DEFAULT_FORWARD_CACHE_SIZE;
+    /** 自动向前缓存的个数，默认个数为{@link #DEFAULT_FORWARD_CACHE_NUMBER} **/
+    private volatile int                    forwardCacheNumber           = DEFAULT_FORWARD_CACHE_NUMBER;
 
-    /** 自动向后缓存的个数 ，默认个数为{@link AutoGetDataCache#DEFAULT_BACK_CACHE_SIZE} **/
-    private volatile int                    backCacheNumber            = DEFAULT_BACK_CACHE_SIZE;
+    /** 自动向后缓存的个数 ，默认个数为{@link #DEFAULT_BACK_CACHE_NUMBER} **/
+    private volatile int                    backCacheNumber              = DEFAULT_BACK_CACHE_NUMBER;
 
     /** 获取数据的接口 **/
     private OnGetDataListener<K, V>         onGetDataListener;
 
     /** 存储正在获取数据的线程，防止多个线程同时获取某个key，同时可以获取某个线程的相关信息 **/
-    private transient Map<K, GetDataThread> gettingDataThreadMap       = new ConcurrentHashMap<K, GetDataThread>();
+    private transient Map<K, GetDataThread> gettingDataThreadMap         = new ConcurrentHashMap<K, GetDataThread>();
 
     /**
-     * 获取某个key对应的值，并自动获取新数据进行缓存。如果只获取key对应值不获取新数据进行缓存，可使用{@link AutoGetDataCache#get(Object)}
+     * 获取某个key对应的值，并自动获取新数据进行缓存。如果只获取key对应值不获取新数据进行缓存，可使用{@link #get(Object)}
      * 
      * @param key 待获取值的key
-     * @param keyList key list，按照该list中的key顺序进行缓存，为空表示不进行缓存。缓存设置见{@link AutoGetDataCache}
+     * @param keyList key list，按照该list中的key顺序获取新数据进行缓存，为空表示不进行缓存
      * @return
      */
-    public CacheObject<V> getAndAutoCacheNewData(K key, List<K> keyList) {
+    public CacheObject<V> get(K key, List<K> keyList) {
         if (key == null) {
             return null;
         }
@@ -80,7 +81,7 @@ public class AutoGetDataCache<K, V> extends SimpleCache<K, V> {
     }
 
     /**
-     * 只获取key对应值不获取新数据进行缓存，如果想获取某个key对应的值，并自动获取新数据进行缓存可使用{@link AutoGetDataCache#getAndAutoCacheNewData(Object, List)}
+     * 只获取key对应值不获取新数据进行缓存（同步），如果想获取某个key对应的值，并自动获取新数据进行缓存可使用{@link #get(Object, List)}
      * <ul>
      * <li>若该key为null，返回null</li>
      * <li>若key已在缓存中，返回该key对应的值</li>
@@ -97,7 +98,7 @@ public class AutoGetDataCache<K, V> extends SimpleCache<K, V> {
         }
 
         CacheObject<V> object = super.get(key);
-        if (object == null) {
+        if (object == null && onGetDataListener != null) {
             GetDataThread getDataThread = gettingData(key);
             // 实时获取需要等待获取完成
             if (getDataThread != null) {
@@ -136,7 +137,7 @@ public class AutoGetDataCache<K, V> extends SimpleCache<K, V> {
      */
     protected int autoCacheNewDataForward(K key, List<K> keyList, int cacheCount) {
         int gettingDataCount = 0;
-        if (key != null && !ListUtils.isEmpty(keyList)) {
+        if (key != null && !ListUtils.isEmpty(keyList) && onGetDataListener != null) {
             int cachedCount = 0;
             boolean beginCount = false;
             for (int i = 0; i < keyList.size() && cachedCount <= cacheCount; i++) {
@@ -174,7 +175,7 @@ public class AutoGetDataCache<K, V> extends SimpleCache<K, V> {
      */
     protected int autoCacheNewDataBack(K key, List<K> keyList, int cacheCount) {
         int gettingDataCount = 0;
-        if (key != null && !ListUtils.isEmpty(keyList)) {
+        if (key != null && !ListUtils.isEmpty(keyList) && onGetDataListener != null) {
             int cachedCount = 0;
             boolean beginCount = false;
             for (int i = keyList.size() - 1; i >= 0 && cachedCount <= cacheCount; i--) {
@@ -223,50 +224,73 @@ public class AutoGetDataCache<K, V> extends SimpleCache<K, V> {
     }
 
     /**
-     * 构造函数，初始化缓存
-     * 
-     * @param maxSize 缓存最大容量
-     * @param validTime 缓存中元素有效时间，小于0表示元素不会失效，失效规则见{@link SimpleCache#isExpired(CacheObject)}的实现类
-     * @param cacheFullRemoveType cache满时删除元素类型，见{@link CacheFullRemoveType}
-     * @param onGetDataListener 获取数据的方法
-     */
-    public AutoGetDataCache(int maxSize, long validTime, CacheFullRemoveType<V> cacheFullRemoveType,
-                            OnGetDataListener<K, V> onGetDataListener){
-        super(maxSize, validTime, cacheFullRemoveType);
-        this.onGetDataListener = onGetDataListener;
-    }
-
-    /**
-     * 构造函数， 初始化缓存，cache满时删除元素类型为{@link RemoveTypeEnterTimeFirst}
-     * 
-     * @param maxSize 缓存最大容量
-     * @param validTime 缓存中元素有效时间，小于0表示元素不会失效，失效规则见{@link SimpleCache#isExpired(CacheObject)}的实现类
-     * @param onGetDataListener 获取数据的方法
-     */
-    public AutoGetDataCache(int maxSize, long validTime, OnGetDataListener<K, V> onGetDataListener){
-        super(maxSize, validTime);
-        this.onGetDataListener = onGetDataListener;
-    }
-
-    /**
-     * 构造函数，初始化缓存，默认元素不会失效，cache满时删除元素类型为{@link RemoveTypeEnterTimeFirst}
-     * 
-     * @param maxSize 缓存最大容量
-     * @param onGetDataListener 获取数据的方法
-     * @param 其他参数 见{@link SimpleCache#SimpleCache(int)}
-     */
-    public AutoGetDataCache(int maxSize, OnGetDataListener<K, V> onGetDataListener){
-        super(maxSize);
-        this.onGetDataListener = onGetDataListener;
-    }
-
-    /**
-     * 构造函数，初始化缓存，默认大小为{@link SimpleCache#DEFAULT_MAX_SIZE}，元素不会失效，cache满时删除元素类型为 {@link RemoveTypeEnterTimeFirst}
+     * 初始化缓存
+     * <ul>
+     * <li>缓存最大容量为{@link SimpleCache#DEFAULT_MAX_SIZE}</li>
+     * <li>元素不会失效</li>
+     * <li>cache满时删除元素类型为{@link RemoveTypeEnterTimeFirst}</li>
+     * </ul>
      * 
      * @param onGetDataListener 获取数据的方法
      */
     public AutoGetDataCache(OnGetDataListener<K, V> onGetDataListener){
-        super();
+        this(onGetDataListener, DEFAULT_MAX_SIZE, -1, new RemoveTypeEnterTimeFirst<V>());
+    }
+
+    /**
+     * 初始化缓存
+     * <ul>
+     * <li>元素不会失效</li>
+     * <li>cache满时删除元素类型为{@link RemoveTypeEnterTimeFirst}</li>
+     * </ul>
+     * 
+     * @param onGetDataListener 获取数据的方法
+     * @param maxSize 缓存最大容量
+     */
+    public AutoGetDataCache(OnGetDataListener<K, V> onGetDataListener, int maxSize){
+        this(onGetDataListener, maxSize, -1, new RemoveTypeEnterTimeFirst<V>());
+    }
+
+    /**
+     * 初始化缓存
+     * <ul>
+     * <li>cache满时删除元素类型为{@link RemoveTypeEnterTimeFirst}</li>
+     * </ul>
+     * 
+     * @param onGetDataListener 获取数据的方法
+     * @param maxSize 缓存最大容量
+     * @param validTime 缓存中元素有效时间，小于等于0表示元素不会失效，失效规则见{@link SimpleCache#isExpired(CacheObject)}
+     */
+    public AutoGetDataCache(OnGetDataListener<K, V> onGetDataListener, int maxSize, long validTime){
+        this(onGetDataListener, maxSize, validTime, new RemoveTypeEnterTimeFirst<V>());
+    }
+
+    /**
+     * 初始化缓存
+     * <ul>
+     * <li>元素不会失效</li>
+     * </ul>
+     * 
+     * @param onGetDataListener 获取数据的方法
+     * @param maxSize 缓存最大容量
+     * @param cacheFullRemoveType cache满时删除元素类型，见{@link CacheFullRemoveType}
+     */
+    public AutoGetDataCache(OnGetDataListener<K, V> onGetDataListener, int maxSize,
+                            CacheFullRemoveType<V> cacheFullRemoveType){
+        this(onGetDataListener, maxSize, -1, cacheFullRemoveType);
+    }
+
+    /**
+     * 初始化缓存
+     * 
+     * @param onGetDataListener 获取数据的方法
+     * @param maxSize 缓存最大容量
+     * @param validTime 缓存中元素有效时间，小于等于0表示元素不会失效，失效规则见{@link SimpleCache#isExpired(CacheObject)}
+     * @param cacheFullRemoveType cache满时删除元素类型，见{@link CacheFullRemoveType}
+     */
+    public AutoGetDataCache(OnGetDataListener<K, V> onGetDataListener, int maxSize, long validTime,
+                            CacheFullRemoveType<V> cacheFullRemoveType){
+        super(maxSize, validTime, cacheFullRemoveType);
         this.onGetDataListener = onGetDataListener;
     }
 
@@ -346,7 +370,7 @@ public class AutoGetDataCache<K, V> extends SimpleCache<K, V> {
          * 获取数据的方法
          * 
          * @param key
-         * @return
+         * @return 返回null不会存入缓存
          */
         public CacheObject<V> onGetData(K key);
     }

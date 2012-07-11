@@ -53,24 +53,24 @@ public class AutoGetDataCacheDemo extends TestCase {
 
         // 缓存定义，在OnGetDataListener中定义获取数据的接口
         AutoGetDataCache<String, String> cache = null;
-        cache = new AutoGetDataCache<String, String>(5, -1, new RemoveTypeEnterTimeFirst<String>(),
-                                                     new OnGetDataListener<String, String>() {
+        cache = new AutoGetDataCache<String, String>(new OnGetDataListener<String, String>() {
 
-                                                         private static final long serialVersionUID = 1L;
+             private static final long serialVersionUID = 1L;
 
-                                                         @Override
-                                                         public CacheObject<String> onGetData(String key) {
-                                                             CacheObject<String> o = new CacheObject<String>();
-                                                             o.setData(getSlowResponseData());
-                                                             return o;
-                                                         }
-                                                     });
+             @Override
+             public CacheObject<String> onGetData(String key) {
+                 CacheObject<String> o = new CacheObject<String>();
+                 o.setData(getSlowResponseData());
+                 return o;
+             }
+         }, 5, -1,
+                                                     new RemoveTypeEnterTimeFirst<String>());
 
         int count = 10;
         long start = 0, end = 0;
         start = System.currentTimeMillis();
         for (int i = 0; i < count; i++) {
-            System.out.print(cache.getAndAutoCacheNewData(Integer.toString(i), keyList).getData() + " ");
+            System.out.print(cache.get(Integer.toString(i), keyList).getData() + " ");
         }
         end = System.currentTimeMillis();
         System.out.println();
