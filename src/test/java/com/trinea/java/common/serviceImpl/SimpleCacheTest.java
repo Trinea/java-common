@@ -90,19 +90,14 @@ public class SimpleCacheTest extends TestCase {
     }
 
     public void testGetSize() {
-        cache1.put("cache1Key1", "cache1Value1");
-        cache2.put("cache2Key1", "cache2Value1s");
-        assertTrue(cache1.getSize() >= 1);
-    }
-
-    public void testGetValidSize() {
         cache1.put("cache1Key2", "cache1Value2");
         cache2.put("cache2Key2", "cache2Value2");
         try {
-            assertTrue(cache1.getValidSize() > 0);
+            assertTrue(cache1.getSize() > 0);
+            int size1 = cache1.getSize(), size2 = cache2.getSize();
             Thread.sleep(cache1ValidTime + 10);
-            assertTrue(cache1.getSize() > cache1.getValidSize());
-            assertTrue(cache2.getSize() == cache2.getValidSize());
+            assertTrue(size1 > cache1.getSize());
+            assertTrue(size2 == cache2.getSize());
         } catch (InterruptedException e) {
         }
     }

@@ -21,11 +21,46 @@ public class ListUtils {
      * isEmpty({1})    =   false;
      * </pre>
      * 
+     * @param <V>
      * @param sourceList
      * @return 若list为null或长度为0, 返回true; 否则返回false.
      */
     public static <V> boolean isEmpty(List<V> sourceList) {
         return (sourceList == null || sourceList.size() == 0);
+    }
+
+    /**
+     * 比较两个ArrayList是否相等
+     * 
+     * <pre>
+     * isEquals(null, null) = true;
+     * isEquals(new ArrayList<String>(), null) = false;
+     * isEquals(null, new ArrayList<String>()) = false;
+     * isEquals(new ArrayList<String>(), new ArrayList<String>()) = true;
+     * </pre>
+     * 
+     * @param <V>
+     * @param actual
+     * @param expected
+     * @return
+     */
+    public static <V> boolean isEquals(ArrayList<V> actual, ArrayList<V> expected) {
+        if (actual == null) {
+            return expected == null;
+        } else if (expected == null) {
+            return false;
+        } else {
+            if (actual.size() != expected.size()) {
+                return false;
+            }
+
+            for (int i = 0; i < actual.size(); i++) {
+                if (!ObjectUtils.isEquals(actual.get(i), expected.get(i))) {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 
     /**

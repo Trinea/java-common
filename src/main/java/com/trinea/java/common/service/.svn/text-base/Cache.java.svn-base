@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.trinea.java.common.entity.CacheObject;
-import com.trinea.java.common.serviceImpl.SimpleCache;
 
 /**
  * 小型缓存
@@ -52,7 +51,7 @@ public interface Cache<K, V> {
      * 
      * @param cache2
      */
-    public void putAll(SimpleCache<K, V> cache2);
+    public void putAll(Cache<K, V> cache2);
 
     /**
      * 缓存中某个key是否存在

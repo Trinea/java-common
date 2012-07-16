@@ -6,12 +6,12 @@ END
 .project
 K 25
 svn:wc:ra_dav:version-url
-V 30
-/svn/!svn/ver/2/trunk/.project
+V 31
+/svn/!svn/ver/12/trunk/.project
 END
 pom.xml
 K 25
 svn:wc:ra_dav:version-url
 V 30
-/svn/!svn/ver/11/trunk/pom.xml
+/svn/!svn/ver/12/trunk/pom.xml
 END

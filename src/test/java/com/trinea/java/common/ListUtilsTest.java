@@ -25,6 +25,26 @@ public class ListUtilsTest extends TestCase {
         assertFalse(ListUtils.isEmpty(sourceList));
     }
 
+    public void testIsEquals() {
+        ArrayList<String> list1 = new ArrayList<String>(), list2 = new ArrayList<String>();
+
+        assertTrue(ListUtils.isEquals(null, null));
+        assertFalse(ListUtils.isEquals(null, list2));
+        assertFalse(ListUtils.isEquals(null, new ArrayList<String>()));
+        assertFalse(ListUtils.isEquals(list1, null));
+        assertFalse(ListUtils.isEquals(new ArrayList<String>(), null));
+        assertTrue(ListUtils.isEquals(list1, list2));
+        assertTrue(ListUtils.isEquals(new ArrayList<String>(), new ArrayList<String>()));
+
+        list1.add("a");
+        assertFalse(ListUtils.isEquals(list1, list2));
+        list2.add("a");
+        assertTrue(ListUtils.isEquals(list1, list2));
+        list1.add("b");
+        list2.add("c");
+        assertFalse(ListUtils.isEquals(list1, list2));
+    }
+
     public void testJoinListOfString() {
         assertEquals(ListUtils.join(null), "");
 

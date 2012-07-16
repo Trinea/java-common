@@ -4,7 +4,7 @@
   <groupId>com.trinea.java.common</groupId>
   <artifactId>JavaCommon</artifactId>
   <packaging>jar</packaging>
-  <version>2.0.1</version>
+  <version>2.0.3</version>
   <name>JavaCommon</name>
   <url>http://maven.apache.org</url>
   <dependencies>

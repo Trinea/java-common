@@ -148,14 +148,14 @@ public class AutoGetDataCacheTest extends TestCase {
         assertNull(cache.get(null));
         assertNull(cache.get(null, null));
         assertTrue(value != null && ObjectUtils.isEquals(value.getData(), Integer.toString(0)));
-        assertTrue(cache.getValidSize() == 1);
+        assertTrue(cache.getSize() == 1);
         assertTrue(cache.getHitRate() == 0);
         value = cache.get(Integer.toString(2), null);
         value = cache.get(Integer.toString(2), keyList);
         assertTrue(1 / 3 - cache.getHitRate() < 0.000001);
         assertTrue(value != null && ObjectUtils.isEquals(value.getData(), Integer.toString(2)));
         SleepUtils.sleep();
-        if (cache.getValidSize() == 5) {
+        if (cache.getSize() == 5) {
             value = cache.get(Integer.toString(3), keyList);
             assertTrue(cache.getHitRate() == 0.5);
             value = cache.get(Integer.toString(4), keyList);

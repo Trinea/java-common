@@ -288,7 +288,7 @@ public class SimpleCache<K, V> implements Cache<K, V>, Serializable {
      * @param cache2
      */
     @Override
-    public void putAll(SimpleCache<K, V> cache2) {
+    public void putAll(Cache<K, V> cache2) {
         for (Entry<K, CacheObject<V>> e : cache2.entrySet()) {
             if (e != null) {
                 put(e.getKey(), e.getValue());
